@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password_hash String
+  created_at    DateTime @default(now())
+  type          String
+
+  professional Professional? @relation(fields: [professional_id], references: [id])
+  patient      Patient?      @relation(fields: [patient_id], references: [id])
+
+  professional_id String?
+  patient_id      String?
+
+  @@map("users")
+}
+
+model Clinic {
+  id            String         @id @default(uuid())
+  name          String
+  address       String?
+  phone         String?
+  Professionals Professional[]
+
+  @@map("clinics")
+}
+
+model Patient {
+  id           String        @id @default(uuid())
+  name         String
+  cpf          String        @unique
+  birthday     String
+  address      String?
+  phone        String
+  created_at   DateTime      @default(now())
+  Appointments Appointment[]
+  Treatmens    Treatment[]
+  Users        User[]
+
+  @@map("patients")
+}
+
+model Appointment {
+  id        String   @id @default(uuid())
+  date_hour DateTime
+
+  professional    Professional @relation(fields: [professional_id], references: [id])
+  patient         Patient      @relation(fields: [patient_id], references: [id])
+  professional_id String
+  patient_id      String
+  room            Room         @relation(fields: [room_id], references: [id])
+  room_id         String
+
+  @@map("appointments")
+}
+
+model Room {
+  id                String             @id @default(uuid())
+  title             String
+  Appointments      Appointment[]
+  ProfessionalRooms ProfessionalRoom[]
+
+  @@map("rooms")
+}
+
+model Professional {
+  id                String             @id @default(uuid())
+  name              String
+  cpf               String             @unique
+  specialty         String
+  phone             String
+  avatar            Bytes?
+  clinic            Clinic             @relation(fields: [clinic_id], references: [id])
+  clinic_id         String
+  Appointments      Appointment[]
+  ProfessionalRooms ProfessionalRoom[]
+  Treatments        Treatment[]
+  Users             User[]
+
+  @@map("professionals")
+}
+
+model ProfessionalRoom {
+  id           String       @id @default(uuid())
+  professional Professional @relation(fields: [professional_id], references: [id])
+
+  room            Room   @relation(fields: [room_id], references: [id])
+  professional_id String
+  room_id         String
+
+  @@map("professional_rooms")
+}
+
+model Procedure {
+  id              String      @id @default(uuid())
+  title           String
+  price_procedure String
+  cost_procedure  String
+  Treatment       Treatment[]
+
+  @@map("procedures")
+}
+
+model Treatment {
+  id              String       @id @default(uuid())
+  title           String       @unique
+  price_treatment String
+  professional    Professional @relation(fields: [professional_id], references: [id])
+  professional_id String
+  patient         Patient      @relation(fields: [patient_id], references: [id])
+  patient_id      String
+  procedure       Procedure    @relation(fields: [procedure_id], references: [id])
+  procedure_id    String
+  created_at      DateTime     @default(now())
+  finished_at     DateTime?
+
+  @@map("treatments")
+}
