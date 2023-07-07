@@ -55,19 +55,17 @@ export class RegisterAppointmentUseCase {
       throw new ProfessionalNotAllowedError();
     }
 
-    const checkProfessionalExists = await this.professionalsRepository.findById(
+    const professional = await this.professionalsRepository.findById(
       professionalId,
     );
 
-    if (!checkProfessionalExists) {
+    if (!professional) {
       throw new ProfessionalNotFoundError();
     }
 
-    const checkPatientExists = await this.patientsRepository.findById(
-      patientId,
-    );
+    const patient = await this.patientsRepository.findById(patientId);
 
-    if (!checkPatientExists) {
+    if (!patient) {
       throw new PatientNotFoundError();
     }
 
@@ -88,7 +86,7 @@ export class RegisterAppointmentUseCase {
       }
     }
 
-    if (dateHourFns.isBefore(startOfDay || dateHourFns.isAfter(endOfDay))) {
+    if (dateHourFns.isBefore(startOfDay) || dateHourFns.isAfter(endOfDay)) {
       throw new OutOfOfficeHoursError();
     }
 
@@ -115,7 +113,9 @@ export class RegisterAppointmentUseCase {
     const appointment = await this.appointmentsRepository.create({
       date_hour: dateHourFns.toDate(),
       professional_id: professionalId,
+      professional_name: professional.name,
       patient_id: patientId,
+      patient_name: patient.name,
       room_id: roomId,
     });
 

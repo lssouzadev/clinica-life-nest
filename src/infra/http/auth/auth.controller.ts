@@ -7,22 +7,26 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthenticateBody } from '../dtos/authenticate-body';
-import { AuthenticateUserUseCase } from '@application/use-cases/user/authenticate';
 import { ThrottlerGuard } from '@nestjs/throttler';
+import { AuthService } from './auth.service';
 
-@Controller('sessions')
+@Controller('auth')
 export class AuthController {
-  constructor(private authenticateUseCase: AuthenticateUserUseCase) {}
+  constructor(private authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
   @UseGuards(ThrottlerGuard)
-  @Post()
-  async authenticate(@Body() body: AuthenticateBody) {
+  @Post('sessions')
+  async signIn(@Body() body: AuthenticateBody) {
     const { email, password } = body;
 
-    await this.authenticateUseCase.execute({
-      email,
-      password,
-    });
+    return this.authService.signIn(email, password);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('refresh')
+  async refresh(@Body() body: { refresh_token: string }) {
+    const { refresh_token } = body;
+    return await this.authService.refresh(refresh_token);
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Param } from '@nestjs/common';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 import { CreateProfessionalRoomBody } from '@infra/http/dtos/create-professional-room-body';
 import { CreateProfessionalRoomUseCase } from '@application/use-cases/professional-room/create-professional-room';
 
@@ -7,6 +7,7 @@ export class ProfessionalRoomsController {
   constructor(
     private createProfessionalRoomUseCase: CreateProfessionalRoomUseCase,
   ) {}
+  @Post()
   async create(
     @Param('roomId') roomId: string,
     @Body() body: CreateProfessionalRoomBody,

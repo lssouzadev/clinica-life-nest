@@ -1,3 +1,5 @@
+import { TokenExpiredError } from '@common/@errors/types/token-expired-error';
+import { env } from '@env/index';
 import {
   CanActivate,
   ExecutionContext,
@@ -19,12 +21,12 @@ export class AuthGuard implements CanActivate {
     }
     try {
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: process.env.JWT_SECRET,
+        secret: env.JWT_SECRET,
       });
 
       request['user'] = payload;
     } catch {
-      throw new UnauthorizedException();
+      throw new TokenExpiredError();
     }
     return true;
   }

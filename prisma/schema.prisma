@@ -56,12 +56,14 @@ model Appointment {
   id        String   @id @default(uuid())
   date_hour DateTime
 
-  professional    Professional @relation(fields: [professional_id], references: [id])
-  patient         Patient      @relation(fields: [patient_id], references: [id])
-  professional_id String
-  patient_id      String
-  room            Room         @relation(fields: [room_id], references: [id])
-  room_id         String
+  professional      Professional @relation(fields: [professional_id], references: [id])
+  patient           Patient      @relation(fields: [patient_id], references: [id])
+  professional_id   String
+  professional_name String
+  patient_id        String
+  patient_name      String
+  room              Room         @relation(fields: [room_id], references: [id])
+  room_id           String
 
   @@map("appointments")
 }

@@ -87,10 +87,13 @@ export class AppointmentsController {
 
     const dateFormat = dayjs.utc(date).toDate();
 
-    await this.getProfessionalAppointmentsUseCase.execute({
-      professionalId,
-      date: dateFormat,
-    });
+    const { appointments } =
+      await this.getProfessionalAppointmentsUseCase.execute({
+        professionalId,
+        date: dateFormat,
+      });
+
+    return appointments;
   }
 
   @Get('/patients/:patientId/appointments')

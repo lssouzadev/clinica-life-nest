@@ -18,9 +18,12 @@ import { ProfessionalUnavailableInterceptor } from '@common/@errors/interceptors
 import { RoomNotFoundInterceptor } from '@common/@errors/interceptors/room-not-found.interceptor';
 import { UserAlreadyExistsInterceptor } from '@common/@errors/interceptors/user-already-exists.interceptor';
 import { UserNotFoundInterceptor } from '@common/@errors/interceptors/user-not-found.interceptor';
+import { TokenExpiredInterceptor } from '@common/@errors/interceptors/token-expired.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors();
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -49,8 +52,9 @@ async function bootstrap() {
     new RoomNotFoundInterceptor(),
     new UserAlreadyExistsInterceptor(),
     new UserNotFoundInterceptor(),
+    new TokenExpiredInterceptor(),
   );
 
-  await app.listen(3000);
+  await app.listen(3333);
 }
 bootstrap();
