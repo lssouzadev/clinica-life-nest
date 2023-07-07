@@ -1,5 +1,5 @@
 import { Prisma, Patient } from '@prisma/client';
-import { PatientsRepository } from '@application/repositories/patients-repository';
+import { PatientsRepository } from 'src/@types/repositories/patients-repository';
 import { randomUUID } from 'node:crypto';
 
 export class InMemoryPatientsRepository implements PatientsRepository {

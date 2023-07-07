@@ -1,5 +1,5 @@
 import { Prisma, Professional } from '@prisma/client';
-import { ProfessionalsRepository } from '@application/repositories/professionals-repository';
+import { ProfessionalsRepository } from 'src/@types/repositories/professionals-repository';
 import { randomUUID } from 'crypto';
 
 export class InMemoryProfessionalsRepository

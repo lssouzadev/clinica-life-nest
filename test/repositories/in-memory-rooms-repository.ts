@@ -1,5 +1,5 @@
 import { Prisma, Room } from '@prisma/client';
-import { RoomsRepository } from '@application/repositories/rooms-repository';
+import { RoomsRepository } from 'src/@types/repositories/rooms-repository';
 import { randomUUID } from 'crypto';
 
 export class InMemoryRoomsRepository implements RoomsRepository {

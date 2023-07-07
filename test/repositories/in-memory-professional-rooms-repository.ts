@@ -1,5 +1,5 @@
 import { Prisma, ProfessionalRoom } from '@prisma/client';
-import { ProfessionalRoomsRepository } from '@application/repositories/professional-rooms-repository';
+import { ProfessionalRoomsRepository } from 'src/@types/repositories/professional-rooms-repository';
 import { randomUUID } from 'crypto';
 
 export class InMemoryProfessionalRoomsRepository

@@ -1,5 +1,5 @@
 import { Prisma, Procedure } from '@prisma/client';
-import { ProceduresRepository } from '@application/repositories/procedures-repository';
+import { ProceduresRepository } from 'src/@types/repositories/procedures-repository';
 import { randomUUID } from 'crypto';
 
 export class InMemoryProceduresRepository implements ProceduresRepository {

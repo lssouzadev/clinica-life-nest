@@ -1,5 +1,5 @@
 import { Prisma, Appointment } from '@prisma/client';
-import { AppointmentsRepository } from '@application/repositories/appointments-repository';
+import { AppointmentsRepository } from 'src/@types/repositories/appointments-repository';
 import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
