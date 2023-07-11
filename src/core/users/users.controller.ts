@@ -9,7 +9,7 @@ import { hash } from 'bcryptjs';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Post('users')
   async register(@Body() body: RegisterUserBody) {
     const { email, password, name, patientId, professionalId, type } = body;
