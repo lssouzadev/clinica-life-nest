@@ -18,6 +18,7 @@ export class AuthController {
   @UseGuards(ThrottlerGuard)
   @Post('sessions')
   async signIn(@Body() body: AuthenticateBody) {
+    console.log('passei aqui');
     const { email, password } = body;
 
     return this.authService.signIn(email, password);

@@ -57,7 +57,7 @@ export class AuthService {
   async tokenGenerate(payload: PayloadProps) {
     const access_token = await this.jwtService.signAsync(payload, {
       secret: env.JWT_SECRET,
-      expiresIn: '1 hour',
+      expiresIn: '30s',
     });
     const refresh_token = await this.jwtService.signAsync(payload, {
       secret: env.JWT_SECRET,

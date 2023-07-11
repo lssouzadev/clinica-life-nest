@@ -7,7 +7,9 @@ import * as interceptor from '@common/@errors/interceptors';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors();
+  app.enableCors({
+    origin: 'http://192.168.1.115:3000',
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
