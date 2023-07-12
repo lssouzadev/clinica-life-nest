@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CreateRoomBody } from 'src/@types/dtos/create-room-body';
 import { RoomsService } from './rooms.service';
 
@@ -12,5 +12,9 @@ export class RoomsController {
     await this.roomsService.create({
       title,
     });
+  }
+  @Get()
+  async findAll() {
+    return await this.roomsService.findAll();
   }
 }

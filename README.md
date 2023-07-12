@@ -1,73 +1,53 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+Para obter apenas os horários disponíveis para agendamento, levando em consideração as regras mencionadas, utilizando NestJS e Prisma com PostgreSQL, você pode criar uma consulta da seguinte maneira:
+import { Prisma } from '@prisma/client';
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+const horariosDisponiveis = async () => {
+  const prisma = new Prisma.Client();
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+  const agendamentos = await prisma.appointment.findMany({
+    select: {
+      date_hour: true,
+    },
+  });
 
-## Description
+  const horariosOcupados = agendamentos.map((agendamento) => agendamento.date_hour);
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+  const dataInicio = new Date();
+  dataInicio.setHours(7, 0, 0); // Define o horário inicial (7:00)
 
-## Installation
+  const dataFim = new Date();
+  dataFim.setHours(21, 0, 0); // Define o horário final (21:00)
 
-```bash
-$ npm install
-```
+  const horariosDisponiveis = [];
 
-## Running the app
+  let horaAtual = dataInicio;
 
-```bash
-# development
-$ npm run start
+  while (horaAtual <= dataFim) {
+    const horaArredondada = new Date(horaAtual);
+    horaArredondada.setMinutes(0, 0); // Arredonda para a hora mais próxima
 
-# watch mode
-$ npm run start:dev
+    if (!horariosOcupados.includes(horaArredondada.toISOString())) {
+      horariosDisponiveis.push(horaArredondada.toISOString());
+    }
 
-# production mode
-$ npm run start:prod
-```
+    horaAtual.setMinutes(horaAtual.getMinutes() + 30); // Incrementa 30 minutos
+  }
 
-## Test
+  console.log(horariosDisponiveis);
 
-```bash
-# unit tests
-$ npm run test
+  prisma.$disconnect();
+};
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+horariosDisponiveis();
+Explicação:
+	1.	Conecte-se ao banco de dados PostgreSQL usando o Prisma.
+	2.	Recupere todos os valores ﻿date_hour dos agendamentos existentes no banco de dados.
+	3.	Armazene os horários ocupados em um array.
+	4.	Defina o horário de início e término dos horários disponíveis (7:00 às 21:00).
+	5.	Itere sobre cada intervalo de 30 minutos dentro do horário de início e término.
+	6.	Verifique se o horário atual não está incluído no array de horários ocupados.
+	7.	Se não estiver ocupado, adicione o horário atual ao array de horários disponíveis.
+	8.	Avance o horário atual em 30 minutos e repita o processo até atingir o horário de término.
+	9.	Imprima o array de horários disponíveis.
+	10.	Desconecte-se do banco de dados.
+O array ﻿horariosDisponiveis conterá os horários disponíveis para agendamento que seguem a regra do intervalo de 30 minutos e excluem os agendamentos já marcados.

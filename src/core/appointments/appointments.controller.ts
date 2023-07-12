@@ -56,6 +56,17 @@ export class AppointmentsController {
     await this.appointmentsService.getAppointmentsByDate(date);
   }
 
+  @Get('appointments/get-available')
+  async getAvailableSchedules(
+    @Query() query: { room_id: string; date: string },
+  ) {
+    const { date, room_id } = query;
+    return await await this.appointmentsService.getAvailableSchedules(
+      room_id,
+      date,
+    );
+  }
+
   @Get('/professionals/:professionalId/appointments')
   async getByProfessional(
     @Param('professionalId') professionalId: string,
