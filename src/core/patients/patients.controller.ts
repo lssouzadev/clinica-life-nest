@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { RegisterPatientBody } from 'src/@types/dtos/register-patient-body';
 import { PatientsService } from './patients.service';
 
@@ -16,5 +16,10 @@ export class PatientsController {
       birthday,
       phone,
     });
+  }
+
+  @Get()
+  async findAll() {
+    return await this.patientsService.findAll();
   }
 }

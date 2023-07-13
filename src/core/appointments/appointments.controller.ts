@@ -58,10 +58,11 @@ export class AppointmentsController {
 
   @Get('appointments/get-available')
   async getAvailableSchedules(
-    @Query() query: { room_id: string; date: string },
+    @Query() query: { room_id: string; professional_id: string; date: string },
   ) {
-    const { date, room_id } = query;
+    const { date, professional_id, room_id } = query;
     return await await this.appointmentsService.getAvailableSchedules(
+      professional_id,
       room_id,
       date,
     );

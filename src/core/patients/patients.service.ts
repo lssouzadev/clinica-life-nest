@@ -51,4 +51,8 @@ export class PatientsService {
 
     return patient;
   }
+
+  async findAll() {
+    return await this.prisma.patient.findMany();
+  }
 }

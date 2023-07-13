@@ -55,4 +55,8 @@ export class ProfessionalsService {
       },
     });
   }
+
+  async findAll() {
+    return await this.prisma.professional.findMany();
+  }
 }

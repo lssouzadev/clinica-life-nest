@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { RegisterProfessionalBody } from 'src/@types/dtos/register-professional-body';
 import { ProfessionalsService } from './professionals.service';
 
@@ -16,5 +16,9 @@ export class ProfessionalsController {
       phone,
       clinic_id: clinicId,
     });
+  }
+  @Get()
+  async findAllProfessionals() {
+    return await this.professionalsService.findAll();
   }
 }
