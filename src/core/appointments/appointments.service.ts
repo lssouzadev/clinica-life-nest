@@ -191,71 +191,6 @@ export class AppointmentsService {
     return appointments;
   }
 
-  // async getAvailableSchedules(professional_id: string, date: string) {
-  //   const agendamentos = await this.prisma.appointment.findMany({
-  //     where: {
-  //       AND: [
-  //         {
-  //           date_hour: {
-  //             gte: dayjs.utc(date).startOf('day').toDate(),
-  //             lt: dayjs.utc(date).endOf('day').toDate(),
-  //           },
-  //         },
-  //         {
-  //           professional_id,
-  //         },
-  //       ],
-  //     },
-  //   });
-
-  //   const horariosOcupados = agendamentos.map((agendamento) =>
-  //     dayjs.utc(agendamento.date_hour).toISOString(),
-  //   );
-  //   console.log(`horarios ocupados: ${horariosOcupados}`);
-
-  //   const dataInicio = dayjs
-  //     .utc(date)
-  //     .set('hour', 7)
-  //     .set('minute', 0)
-  //     .set('second', 0)
-  //     .set('millisecond', 0)
-  //     .toISOString(); // Define o horário inicial (7:00)
-
-  //   console.log(`data de inicio: ${dataInicio}`);
-
-  //   const dataFim = dayjs
-  //     .utc(date)
-  //     .set('hour', 21)
-  //     .set('minute', 0)
-  //     .set('second', 0)
-  //     .toISOString(); // Define o horário final (21:00)
-
-  //   const horariosDisponiveis = [];
-
-  //   let horaAtual = dayjs.utc(dataInicio).toISOString();
-
-  //   console.log(`hora atual ${horaAtual}`);
-
-  //   let horaArredondada = horaAtual;
-  //   const check = !horariosOcupados.includes(horaAtual);
-  //   console.log(`check: ${check}`);
-
-  //   while (horaAtual <= dataFim) {
-  //     horaArredondada = dayjs.utc(horaAtual).toISOString();
-  //     // Arredonda para a hora mais próxima
-  //     console.log(`hora arredondada ${horaArredondada}`);
-
-  //     if (!horariosOcupados.includes(horaArredondada)) {
-  //       console.log(`hora incluida: ${horaArredondada}`);
-  //       horariosDisponiveis.push(horaArredondada);
-  //     }
-
-  //     horaAtual = dayjs.utc(horaAtual).add(30, 'minute').toISOString(); // Incrementa 30 minutos
-  //   }
-
-  //   return horariosDisponiveis;
-  // }
-
   async getAvailableSchedules(professional_id: string, room_id, date: string) {
     const agendamentosDaSala = await this.prisma.appointment.findMany({
       where: {
@@ -349,8 +284,6 @@ export class AppointmentsService {
 
       horaAtual = dayjs.utc(horaAtual).add(30, 'minute').toISOString(); // Incrementa 30 minutos
     }
-
-    console.log(horariosDisponiveis);
 
     return horariosDisponiveis;
   }
