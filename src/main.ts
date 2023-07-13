@@ -8,7 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: 'http://localhost:3000', //'https://clinica-life-next.onrender.com',
+    origin: ['http://localhost:3000', 'https://clinica-life-next.onrender.com'],
   });
 
   app.useGlobalPipes(
